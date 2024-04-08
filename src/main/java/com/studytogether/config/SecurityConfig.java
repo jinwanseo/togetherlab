@@ -6,44 +6,27 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
 
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http
-//            .authorizeHttpRequests(authz ->
-//                authz.requestMatchers("/", "/login", "/sign-up", "/check-email",
-//                        "/check-email-token", "/email-login", "/check-email-login", "/login-link")
-//                    .permitAll()
-//                    .requestMatchers(HttpMethod.GET, "/profile/*").permitAll()
-//                    .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-//                    .permitAll()
-//                    .anyRequest().authenticated()
-//            );
-//
-//        return http.build();
-//    }
 
     @Bean
-    public SecurityFilterChain securityFilterCh(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(
-            auth ->
-                auth.requestMatchers("/", "/login", "/sign-up", "/check-email",
-                        "/check-email-token", "/email-login", "/check-email-login", "/login-link")
-                    .permitAll().
-                    requestMatchers(HttpMethod.GET, "/profile/*").permitAll().
-                    requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-                    .permitAll().
-                    anyRequest().authenticated()
+    public SecurityFilterChain securityFilterChain2(HttpSecurity security) throws Exception {
+        security.authorizeHttpRequests(authorizeRequests ->
+            authorizeRequests
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                .permitAll()
+                .requestMatchers("/", "/sign-up", "/check-email", "/check-email-token",
+                    "/email-login", "/check-email-login", "/login-link")
+                .permitAll()
+                .requestMatchers(HttpMethod.GET, "/profile/*")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
         );
-
-        return httpSecurity.build();
-
-
+        return security.build();
     }
 
 }
