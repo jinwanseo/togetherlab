@@ -30,8 +30,8 @@
     class="flex flex-col items-center max-w-[500px] px-10 pb-10 pt-8 gap-5 shadow-md bg-stone-50 mt-10"
     th:action
     th:method="POST"
-    onsubmit="onSubmitHandler(event)"
     th:object="${signUpForm}">
+  <!--    onsubmit="onSubmitHandler(event)"-->
   <h1 class="text-lg font-bolder">회원가입</h1>
 
   <div class="flex flex-col gap-1 w-full">
@@ -80,32 +80,32 @@
   const nicknameElement = document.getElementById("nickname");
   const passwordElement = document.getElementById("password");
 
-  const onSubmitHandler = (event) => {
-
-    let emailFailedElement = document.querySelector(".validation-failed-email");
-    let nicknameFailedElement = document.querySelector(".validation-failed-nickname");
-    let passwordFailedElement = document.querySelector(".validation-failed-password");
-
-    const validationFields = {};
-
-    if (!emailElement.value) {
-      emailFailedElement.classList.remove("hidden");
-      validationFields.email = "이메일을 입력해주세요"
-    }
-    if (!nicknameElement.value) {
-      nicknameFailedElement.classList.remove("hidden");
-      validationFields.nickname = "닉네임을 입력해주세요"
-    }
-    if (!passwordElement.value) {
-      passwordFailedElement.classList.remove("hidden");
-      validationFields.password = "비밀번호를 입력해주세요"
-    }
-
-    if (Object.keys(validationFields).length > 0) {
-      event.preventDefault();
-      return;
-    }
-  }
+  // const onSubmitHandler = (event) => {
+  //
+  //   let emailFailedElement = document.querySelector(".validation-failed-email");
+  //   let nicknameFailedElement = document.querySelector(".validation-failed-nickname");
+  //   let passwordFailedElement = document.querySelector(".validation-failed-password");
+  //
+  //   const validationFields = {};
+  //
+  //   // if (!emailElement.value) {
+  //   //   emailFailedElement.classList.remove("hidden");
+  //   //   validationFields.email = "이메일을 입력해주세요"
+  //   // }
+  //   // if (!nicknameElement.value) {
+  //   //   nicknameFailedElement.classList.remove("hidden");
+  //   //   validationFields.nickname = "닉네임을 입력해주세요"
+  //   // }
+  //   // if (!passwordElement.value) {
+  //   //   passwordFailedElement.classList.remove("hidden");
+  //   //   validationFields.password = "비밀번호를 입력해주세요"
+  //   // }
+  //
+  //   if (Object.keys(validationFields).length > 0) {
+  //     event.preventDefault();
+  //     return;
+  //   }
+  // }
 
 
 </script>

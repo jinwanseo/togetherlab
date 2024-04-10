@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -33,7 +34,7 @@ public class Account {
 
     @Column(unique = true)
     private String nickname;
-    
+
     private String password;
 
     //  이메일 인증 여부
@@ -69,4 +70,8 @@ public class Account {
     // 스터디 업데이트 알림
     private boolean studyUpdatedByEmail;
     private boolean studyUpdatedByWeb;
+
+    public void generateEmailCheckToken() {
+        this.emailCheckToken = UUID.randomUUID().toString();
+    }
 }
