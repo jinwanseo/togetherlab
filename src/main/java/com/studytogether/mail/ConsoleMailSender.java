@@ -1,4 +1,4 @@
-package com.studytogether;
+package com.studytogether.mail;
 
 import jakarta.mail.internet.MimeMessage;
 import java.io.InputStream;

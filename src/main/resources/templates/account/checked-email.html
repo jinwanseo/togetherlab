@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Checked Email</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="f-screen w-screen bg-stone-200 flex flex-col items-center">
+<nav class="w-full flex flex-row bg-sky-900 px-10">
+  <div class="flex flex-row gap-10 py-3 items-center">
+    <a class="font-bolder text-sky-50 hover:animate-pulse hover:cursor-pointer py-2" href="/"
+       th:href="@{/}" th:text="#{company.name}">
+    </a>
+    <form class="w-[280px] sm:block hidden" th:action="@{/search/study}" method="GET">
+      <input th:placeholder="#{signup.search}"
+             class="text-xs text-slate-700 p-3 w-full"/>
+    </form>
+  </div>
+  <ul class="text-slate-50 ml-auto flex flex-row items-center gap-5">
+    <li class="hover:cursor-pointer hover:animate-pulse">
+      <a th:text="#{signup.login}" th:href="@{/login}"></a>
+    </li>
+    <li class="hover:cursor-pointer hover:animate-pulse">
+      <a th:text="#{signup.home}" th:href="@{/}"></a>
+    </li>
+  </ul>
+</nav>
+
+<div class="flex flex-col gap-5 py-5 text-center w-full px-5">
+  <p class="font-bold text-lg">TogetherLAB 이메일 확인</p>
+  <div th:if="${error}" class="bg-red-300 text-red-800 w-full py-5">이메일 확인 링크가 정확하지 않습니다.</div>
+  <div th:if="${error == null}" class="flex flex-col gap-5">
+    <div class="text-lg font-bolder"
+         th:text="|이메일 확인했습니다. ${numberOfUser}번째 회원, ${nickname}님 가입을 축하합니다.|"></div>
+    <div class="text-sky-600 text-xs">이제부터 가입할때 사용하신 이메일 또는 비밀번호로 로그인할 수 있습니다.</div>
+  </div>
+
+</div>
+
+
+</body>
+</html>

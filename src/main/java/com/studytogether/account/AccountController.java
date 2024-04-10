@@ -4,8 +4,6 @@ import com.studytogether.domain.Account;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @Controller
@@ -21,8 +20,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class AccountController {
 
     private final SignUpFormValidator signUpFormValidator;
+    private final AccountService accountService;
     private final AccountRepository accountRepository;
-    private final JavaMailSender javaMailSender;
+
 
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -47,29 +47,34 @@ public class AccountController {
         BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            log.info("errors = {}", bindingResult);
             return "account/sign-up";
         }
 
-        Account account = Account.builder().email(signUpForm.getEmail())
-            .nickname(signUpForm.getNickname())
-            .password(signUpForm.getPassword()) //TODO password encoding
-            .studyCreatedByWeb(true)
-            .studyEnrollmentResultByWeb(true)
-            .studyUpdatedByWeb(true)
-            .build();
+        this.accountService.processNewAccount(signUpForm);
 
-        Account newAccount = this.accountRepository.save(account);
-
-        newAccount.generateEmailCheckToken();
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(newAccount.getEmail());
-        mailMessage.setSubject("스터디투게더, 회원 가입 인증 메일");
-        mailMessage.setText(
-            "/check-email-token?token=" + newAccount.getEmailCheckToken() + "&email="
-                + newAccount.getEmail()
-        );
-        javaMailSender.send(mailMessage);
         return "redirect:/";
+    }
+
+
+    @GetMapping("/check-email-token")
+    public String checkEmailToken(@RequestParam String token, @RequestParam String email,
+        Model model) {
+        Account account = this.accountRepository.findByEmail(email);
+        String view = "account/checked-email";
+        if (account == null) {
+            model.addAttribute("error", "wrong.email");
+            return view;
+        }
+
+        if (!account.getEmailCheckToken().equals(token)) {
+            model.addAttribute("error", "wrong.token");
+            return view;
+        }
+
+        account.completeSignUp();
+
+        model.addAttribute("numberOfUser", this.accountRepository.count());
+        model.addAttribute("nickname", account.getNickname());
+        return view;
     }
 }
